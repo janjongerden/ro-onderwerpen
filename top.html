@@ -18,8 +18,10 @@ const filterSubjects = () => {
   }
 }
 const clearInput = () => {
-  var filter = document.getElementById('filterText').value = "";
+  var filterInput = document.getElementById('filterText')
+  filterInput.value = "";
   filterSubjects();
+  filterInput.focus();
 }
 </script>
 <style>
