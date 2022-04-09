@@ -1,0 +1,57 @@
+<!DOCTYPE html> <html lang="nl">
+<head>
+    <meta charset="utf-8" />
+    <title>Onderwerpen rijksoverheid</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script>
+const filterSubjects = () => {
+  var filter = document.getElementById('filterText').value.toLowerCase();
+  const subjects = document.getElementsByTagName('div');
+
+  for (const subject of subjects) {
+    var text = subject.innerText;
+    if (text.toLowerCase().indexOf(filter) > -1) {
+      subject.style.display = "";
+    } else {
+      subject.style.display = "none";
+    }
+  }
+}
+const clearInput = () => {
+  var filter = document.getElementById('filterText').value = "";
+  filterSubjects();
+}
+</script>
+<style>
+a:link {
+  text-decoration: none;
+}
+body, html {
+    margin-left:1%;
+    margin-right:1%;
+    margin-bottom:1%;
+    margin-top:1%;
+    width:98%;
+    height:98%;
+}
+input {
+    width: 400px;
+}
+#searchIcon {
+    margin-left: -33px;
+}
+#clearIcon {
+    margin-left: -44px;
+    color: #ccc;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<label for="filterText">Zoek een onderwerp: &nbsp;</label>
+<input autofocus type="text" id="filterText" name="filter" onkeyup="filterSubjects()" placeholder="filterterm"/>
+<span id="searchIcon">&#128269;</span>
+<span id="clearIcon" onclick="clearInput();" title="Wis filter">&#10006;</span>
+<br/>
+<br/>
