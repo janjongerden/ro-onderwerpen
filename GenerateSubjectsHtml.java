@@ -4,24 +4,32 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
-public class ParseSubjects {
+public class GenerateSubjectsHtml {
 
-    private static final String BASE_URL = "https://rijksoverheid.nl/onderwerpen/";
+    private static final String BASE_URL = "https://www.rijksoverheid.nl/onderwerpen/";
+    private static final boolean INCLUDE_THEMES = false;
+
+    Set<String> skipSubSubjects = Set.of(
+            "Nieuws",
+            "Vraag en antwoord",
+            "Documenten");
 
     public static void main(String[] args) throws FileNotFoundException {
-        new ParseSubjects().parse();
+        new GenerateSubjectsHtml().parse();
     }
 
     static class Subject implements Comparable<Subject> {
         String text;
         String path;
         Set<String> themes;
+        List<String> subSubjects;
 
-        public Subject(String subjectText, String subjectPath, String theme) {
+        public Subject(String subjectText, String subjectPath, String theme, List<String> subSubjects) {
             text = subjectText;
             path = subjectPath;
             this.themes = new HashSet<>();
             themes.add(theme);
+            this.subSubjects = subSubjects;
         }
 
         public void addTheme(String theme) {
@@ -51,7 +59,7 @@ public class ParseSubjects {
     }
 
     private void parse() throws FileNotFoundException {
-        Scanner s = new Scanner(new File("onderwerpen.txt"));
+        Scanner s = new Scanner(new File("onderwerpen.html"));
         String theme = null;
         List<Subject> subjects = new ArrayList<>();
         while (s.hasNext()) {
@@ -59,22 +67,47 @@ public class ParseSubjects {
             if (line.contains("<h3><a href=\"/onderwerpen/themas")) {
                 theme = getLineText(line);
             } else if (theme != null && line.contains("<a href=\"/onderwerpen")) {
-                String subjectText = getLineText(line);
-                String subjectPath = getSubjectPath(line);
-                List<Subject> existing = subjects.stream()
-                        .filter(sub -> sub.text.equals(subjectText))
-                        .collect(toList());
-                if (existing.isEmpty()) {
-                    subjects.add(new Subject(subjectText, subjectPath, theme));
-                } else {
-                    existing.get(0).addTheme(theme);
-                }
+                addSubject(subjects, line, theme);
             }
         }
         Collections.sort(subjects);
         for (Subject subject : subjects) {
             printSubject(subject);
         }
+    }
+
+    private void addSubject(List<Subject> subjects, String line, String theme) {
+        String subjectText = getLineText(line);
+        String subjectPath = getSubjectPath(line);
+        List<Subject> existing = subjects.stream()
+                .filter(sub -> sub.text.equals(subjectText))
+                .collect(toList());
+        if (existing.isEmpty()) {
+            List<String> subSubjects = getSubSubjects(subjectPath);
+            subjects.add(new Subject(subjectText, subjectPath, theme, subSubjects));
+        } else {
+            existing.get(0).addTheme(theme);
+        }
+    }
+
+    private List<String> getSubSubjects(String subjectPath) {
+        Scanner s;
+        try {
+            s = new Scanner(new File("subsubjects/" + subjectPath + ".html"));
+        } catch (FileNotFoundException e) {
+            return Collections.emptyList();
+        }
+        List<String> subTexts = new ArrayList<>();
+        while (s.hasNext()) {
+            String line = s.nextLine();
+            if (line.contains("<li><a  href=\"/onderwerpen/")) {
+                String subText = getLineText(line);
+                if (!skipSubSubjects.contains(subText)) {
+                    subTexts.add(subText);
+                }
+            }
+        }
+        return subTexts;
     }
 
     private void printSubject(Subject subject) {
@@ -90,8 +123,13 @@ public class ParseSubjects {
             line.append(" / ").append(normalize(subject.path));
         }
         line.append("</a>");
-        for (String theme : subject.themes) {
-            line.append(" (").append(theme).append(")");
+        if (INCLUDE_THEMES) {
+            for (String theme : subject.themes) {
+                line.append(" (").append(theme).append(")");
+            }
+        }
+        for (String subSubject : subject.subSubjects) {
+            line.append("<span class=\"subsub\">").append(subSubject).append("</span>");
         }
         line.append("</div>");
         System.out.println(line);

@@ -9,9 +9,16 @@ const filterSubjects = () => {
   const subjects = document.getElementsByTagName('div');
 
   for (const subject of subjects) {
-    var text = subject.innerText;
-    if (text.toLowerCase().indexOf(filter) > -1) {
+    if (subject.innerText.toLowerCase().includes(filter)) {
       subject.style.display = "";
+      const subsubs = subject.getElementsByTagName('span');
+      for (const subsub of subsubs) {
+          if (subsub.innerText.toLowerCase().includes(filter)) {
+              subsub.style.display = "";
+          } else {
+              subsub.style.display = "none";
+          }
+      }
     } else {
       subject.style.display = "none";
     }
@@ -46,6 +53,16 @@ input {
     margin-left: -44px;
     color: #ccc;
     cursor: pointer;
+}
+.subsub {
+    color: #777;
+    background-color: #DDD;
+    margin-left: 9px;
+    padding: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 8px;
+    font-size: 0.9rem;
 }
 </style>
 </head>
