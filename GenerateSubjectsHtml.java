@@ -50,10 +50,13 @@ public class GenerateSubjectsHtml {
                 .replaceAll(",", "")
                 .replaceAll(":", "")
                 .replaceAll("'", "")
+                .replaceAll("ï", "i")
+                .replaceAll("ë", "e")
                 .replaceAll(" in ", " ")
                 .replaceAll(" door ", " ")
                 .replaceAll(" via ", " ")
-                .replaceAll(" en ", " ")
+                .replaceAll(" het ", " ")
+                .replaceAll(" van ", " ")
                 .replaceAll(" bij ", " ")
                 .replaceAll(" en ", " ").trim();
     }
@@ -119,7 +122,7 @@ public class GenerateSubjectsHtml {
                 .append("\">")
                 .append(subject.text);
 
-        if (!normalize(subject.text).equals(normalize(subject.path))) {
+        if (!normalize(subject.text).contains(normalize(subject.path))) {
             line.append(" / ").append(normalize(subject.path));
         }
         line.append("</a>");
