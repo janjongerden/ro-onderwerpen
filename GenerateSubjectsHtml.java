@@ -12,6 +12,7 @@ public class GenerateSubjectsHtml {
     Set<String> skipSubSubjects = Set.of(
             "Nieuws",
             "Vraag en antwoord",
+            "Weblog",
             "Documenten");
 
     public static void main(String[] args) throws FileNotFoundException {
