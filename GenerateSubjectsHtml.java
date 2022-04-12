@@ -51,6 +51,7 @@ public class GenerateSubjectsHtml {
                 .replaceAll(",", "")
                 .replaceAll(":", "")
                 .replaceAll("'", "")
+                .replaceAll("&#039;", "")
                 .replaceAll("ï", "i")
                 .replaceAll("ë", "e")
                 .replaceAll(" in ", " ")
