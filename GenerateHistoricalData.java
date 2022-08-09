@@ -72,12 +72,12 @@ public class GenerateHistoricalData {
     private static List<String> compareSubjects(Set<String> yesterday, Set<String> today, String date) {
         List<String> changes = today.stream()
                 .filter(subject -> !yesterday.contains(subject))
-                .map(subject -> newsLine("Nieuw", date, subject))
+                .map(subject -> newsLine("&#9989; Nieuw", date, subject))
                 .collect(toList());
 
         changes.addAll( yesterday.stream()
                 .filter(subject -> !today.contains(subject))
-                .map(subject -> newsLine("Verwijderd", date, subject))
+                .map(subject -> newsLine("&#128683; Verwijderd", date, subject))
                 .collect(toList()));
 
         return changes;
