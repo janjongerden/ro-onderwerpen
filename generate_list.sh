@@ -23,6 +23,6 @@ java GenerateSubjectsHtml >> index.html
 
 cat bottom.html >> index.html
 
-DAY=$(date  +%m-%d)
+DAY=$(date  +%Y-%m-%d)
 mkdir -p archive
 cp index.html "archive/$DAY.html"
