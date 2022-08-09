@@ -3,7 +3,8 @@ set -e
 
 curl --compressed https://www.rijksoverheid.nl/onderwerpen > onderwerpen.html
 
-javac FilterSubjectUrls.java
+javac *.java
+
 java FilterSubjectUrls > url_list.txt
 
 mkdir -p subsubjects
@@ -18,7 +19,6 @@ done
 
 cp top.html index.html
 
-javac GenerateSubjectsHtml.java
 java GenerateSubjectsHtml >> index.html
 
 cat bottom.html >> index.html

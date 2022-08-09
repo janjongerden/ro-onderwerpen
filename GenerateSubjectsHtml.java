@@ -9,7 +9,7 @@ public class GenerateSubjectsHtml {
     private static final String BASE_URL = "https://www.rijksoverheid.nl/onderwerpen/";
     private static final boolean INCLUDE_THEMES = false;
 
-    Set<String> skipSubSubjects = Set.of(
+    private static final Set<String> skipSubSubjects = Set.of(
             "Nieuws",
             "Vraag en antwoord",
             "Weblog",
@@ -17,30 +17,6 @@ public class GenerateSubjectsHtml {
 
     public static void main(String[] args) throws FileNotFoundException {
         new GenerateSubjectsHtml().parse();
-    }
-
-    static class Subject implements Comparable<Subject> {
-        String text;
-        String path;
-        Set<String> themes;
-        List<String> subSubjects;
-
-        public Subject(String subjectText, String subjectPath, String theme, List<String> subSubjects) {
-            text = subjectText;
-            path = subjectPath;
-            this.themes = new HashSet<>();
-            themes.add(theme);
-            this.subSubjects = subSubjects;
-        }
-
-        public void addTheme(String theme) {
-            themes.add(theme);
-        }
-
-        @Override
-        public int compareTo(Subject subject) {
-            return text.compareTo(subject.text);
-        }
     }
 
     private String normalize(String text) {
