@@ -16,10 +16,14 @@ public class GenerateSubjectsHtml {
             "Documenten");
 
     public static void main(String[] args) throws FileNotFoundException {
-        new GenerateSubjectsHtml().parse();
+        List<Subject> subjects = parseOnderwerpenFile();
+
+        for (Subject subject : subjects) {
+            printSubject(subject);
+        }
     }
 
-    private String normalize(String text) {
+    private static String normalize(String text) {
         return text.toLowerCase(Locale.ROOT)
                 .replaceAll("-", " ")
                 .replaceAll("\\(", "")
@@ -39,7 +43,7 @@ public class GenerateSubjectsHtml {
                 .replaceAll(" en ", " ").trim();
     }
 
-    private void parse() throws FileNotFoundException {
+    private static List<Subject> parseOnderwerpenFile() throws FileNotFoundException {
         Scanner s = new Scanner(new File("onderwerpen.html"));
         String theme = null;
         List<Subject> subjects = new ArrayList<>();
@@ -52,12 +56,10 @@ public class GenerateSubjectsHtml {
             }
         }
         Collections.sort(subjects);
-        for (Subject subject : subjects) {
-            printSubject(subject);
-        }
+        return subjects;
     }
 
-    private void addSubject(List<Subject> subjects, String line, String theme) {
+    private static void addSubject(List<Subject> subjects, String line, String theme) {
         String subjectText = getLineText(line);
         String subjectPath = getSubjectPath(line);
         List<Subject> existing = subjects.stream()
@@ -71,7 +73,7 @@ public class GenerateSubjectsHtml {
         }
     }
 
-    private List<String> getSubSubjects(String subjectPath) {
+    private static List<String> getSubSubjects(String subjectPath) {
         Scanner s;
         try {
             s = new Scanner(new File("subsubjects/" + subjectPath + ".html"));
@@ -91,7 +93,7 @@ public class GenerateSubjectsHtml {
         return subTexts;
     }
 
-    private void printSubject(Subject subject) {
+    private static void printSubject(Subject subject) {
         StringBuilder line = new StringBuilder()
                 .append("<div class=\"subject\">")
                 .append("<a href=\"")
@@ -116,13 +118,13 @@ public class GenerateSubjectsHtml {
         System.out.println(line);
     }
 
-    private String getSubjectPath(String line) {
+    private static String getSubjectPath(String line) {
         int start = line.indexOf("/onderwerpen/") + 13;
         int end = line.indexOf("\">");
         return line.substring(start, end);
     }
 
-    private String getLineText(String line) {
+    private static String getLineText(String line) {
         int start = line.indexOf("\">") + 2;
         int end = line.indexOf("</a>");
         return line.substring(start, end);
