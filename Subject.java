@@ -24,4 +24,13 @@ public class Subject implements Comparable<Subject> {
     public int compareTo(Subject subject) {
         return text.compareTo(subject.text);
     }
+
+    public String getFullName() {
+        String fullName = text;
+
+        if (!Util.normalize(text).contains(Util.normalize(path))) {
+            fullName += " / " + Util.normalize(path);
+        }
+        return fullName;
+    }
 }

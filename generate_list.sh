@@ -17,11 +17,7 @@ do
   curl --compressed $line > $subsub
 done
 
-cp top.html index.html
-
-java GenerateSubjectsHtml >> index.html
-
-cat bottom.html >> index.html
+java GenerateSubjectsHtml > index.html
 
 DAY=$(date  +%Y-%m-%d)
 mkdir -p archive

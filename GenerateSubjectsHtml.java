@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -15,32 +16,26 @@ public class GenerateSubjectsHtml {
             "Weblog",
             "Documenten");
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
+        printFile("top.html");
+
         List<Subject> subjects = parseOnderwerpenFile();
+        GenerateHistoricalData.printSubjectHistory(subjects);
+
+        printFile("search.html");
 
         for (Subject subject : subjects) {
             printSubject(subject);
         }
+
+        printFile("bottom.html");
     }
 
-    private static String normalize(String text) {
-        return text.toLowerCase(Locale.ROOT)
-                .replaceAll("-", " ")
-                .replaceAll("\\(", "")
-                .replaceAll("\\)", "")
-                .replaceAll(",", "")
-                .replaceAll(":", "")
-                .replaceAll("'", "")
-                .replaceAll("&#039;", "")
-                .replaceAll("ï", "i")
-                .replaceAll("ë", "e")
-                .replaceAll(" in ", " ")
-                .replaceAll(" door ", " ")
-                .replaceAll(" via ", " ")
-                .replaceAll(" het ", " ")
-                .replaceAll(" van ", " ")
-                .replaceAll(" bij ", " ")
-                .replaceAll(" en ", " ").trim();
+    private static void printFile(String fileName) throws FileNotFoundException {
+        Scanner s = new Scanner(new File(fileName));
+        while (s.hasNext()) {
+            System.out.println(s.nextLine());
+        }
     }
 
     private static List<Subject> parseOnderwerpenFile() throws FileNotFoundException {
@@ -100,11 +95,7 @@ public class GenerateSubjectsHtml {
                 .append(BASE_URL)
                 .append(subject.path)
                 .append("\">")
-                .append(subject.text);
-
-        if (!normalize(subject.text).contains(normalize(subject.path))) {
-            line.append(" / ").append(normalize(subject.path));
-        }
+                .append(subject.getFullName());
         line.append("</a>");
         if (INCLUDE_THEMES) {
             for (String theme : subject.themes) {
