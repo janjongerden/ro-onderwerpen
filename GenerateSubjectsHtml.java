@@ -78,10 +78,21 @@ public class GenerateSubjectsHtml {
         List<String> subTexts = new ArrayList<>();
         while (s.hasNext()) {
             String line = s.nextLine();
+            // type 1 subject pages, they contain a list of urls
             if (line.contains("<li><a  href=\"/onderwerpen/")) {
                 String subText = getLineText(line);
                 if (!skipSubSubjects.contains(subText)) {
                     subTexts.add(subText);
+                }
+            // type 2 subject pages, they have icons for each sub-topic
+            // and the sub-subject name is in an h3
+            } else if (line.strip().equalsIgnoreCase("<div class=\"editorial-navigation-content\">")) {
+                String subLine = s.nextLine().strip();
+                if (subLine.startsWith("<h3>") && subLine.endsWith("</h3>")) {
+                    String subText = subLine.substring(4, subLine.length() - 5);
+                    if (!skipSubSubjects.contains(subText)) {
+                        subTexts.add(subText);
+                    }
                 }
             }
         }

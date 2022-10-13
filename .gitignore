@@ -1,3 +1,8 @@
 /out/
 /.idea/
 /subsubjects/
+*.class
+/archive/
+/index.html
+/onderwerpen.html
+/url_list.txt
