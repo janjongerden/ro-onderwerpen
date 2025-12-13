@@ -1,7 +1,7 @@
 ## Subject tool
 
 This script fetches all subjects from the rijksoverheid.nl website and puts them
-in an html page with a filtering option.
+in an HTML page with a filtering option.
 
 Usage:
 
